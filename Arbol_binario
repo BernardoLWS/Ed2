@@ -1,0 +1,110 @@
+class Nodo:
+    """Clase que representa un nodo del árbol binario."""
+
+    def __init__(self, valor):
+            self.valor = valor
+            self.izquierdo = None
+            self.derecho = None
+
+class ArbolBinario:
+    """Clase que representa un árbol binario."""
+
+    def __init__(self):
+        self.raiz = None
+
+    def insertar_nodo(self, valor):
+        """Inserta un nodo en el árbol."""
+        if self.raiz is None:
+            self.raiz = Nodo(valor)
+        else:
+            self._insertar_recursivo(self.raiz, valor)
+
+    def _insertar_recursivo(self, nodo, valor):
+        if valor < nodo.valor:
+            if nodo.izquierdo is None:
+                nodo.izquierdo = Nodo(valor)
+            else:
+                self._insertar_recursivo(nodo.izquierdo, valor)
+        else:
+            if nodo.derecho is None:
+                nodo.derecho = Nodo(valor)
+            else:
+                self._insertar_recursivo(nodo.derecho, valor)
+
+    def es_vacio(self):
+        """Verifica si el árbol está vacío."""
+        return self.raiz is None
+
+    def es_hoja(self, nodo):
+        """Verifica si un nodo es hoja."""
+        if nodo is None:
+            return False
+        return nodo.izquierdo is None and nodo.derecho is None
+
+    def buscar_x(self, valor):
+        """Busca un valor en el árbol."""
+        return self._buscar_recursivo(self.raiz, valor)
+
+    def _buscar_recursivo(self, nodo, valor):
+        if nodo is None:
+            return False
+        if nodo.valor == valor:
+            return True
+        if valor < nodo.valor:
+            return self._buscar_recursivo(nodo.izquierdo, valor)
+        return self._buscar_recursivo(nodo.derecho, valor)
+
+    def in_orden(self):
+        """Recorrido inorden del árbol."""
+        return self._in_orden_recursivo(self.raiz)
+
+    def _in_orden_recursivo(self, nodo):
+        resultado = []
+        if nodo is not None:
+            resultado += self._in_orden_recursivo(nodo.izquierdo)
+            resultado.append(nodo.valor)
+            resultado += self._in_orden_recursivo(nodo.derecho)
+        return resultado
+
+    def pre_orden(self):
+        """Recorrido preorden del árbol."""
+        return self._pre_orden_recursivo(self.raiz)
+
+    def _pre_orden_recursivo(self, nodo):
+        resultado = []
+        if nodo is not None:
+            resultado.append(nodo.valor)
+            resultado += self._pre_orden_recursivo(nodo.izquierdo)
+            resultado += self._pre_orden_recursivo(nodo.derecho)
+        return resultado
+
+    def post_orden(self):
+        """Recorrido postorden del árbol."""
+        return self._post_orden_recursivo(self.raiz)
+
+    def _post_orden_recursivo(self, nodo):
+        resultado = []
+        if nodo is not None:
+            resultado += self._post_orden_recursivo(nodo.izquierdo)
+            resultado += self._post_orden_recursivo(nodo.derecho)
+            resultado.append(nodo.valor)
+        return resultado
+
+def main():
+    "inicializamos el arbol binario "
+    arbol = ArbolBinario()
+
+    " dando valores "
+    valores = [50, 30, 70, 20, 40, 60, 80]
+    " insertando "
+    for v in valores:
+        arbol.insertar_nodo(v)
+
+    print("¿Árbol vacío?:\n R.-", arbol.es_vacio())
+    print("Buscar 40:\n R.-", arbol.buscar_x(40))
+    print("InOrden:\n", arbol.in_orden())      #izq-raiz-der
+    print("PreOrden:\n", arbol.pre_orden())    #raiz-izq,der
+    print("PostOrden:\n", arbol.post_orden())  #izq-der-raiz
+
+if __name__ == "__main__":
+    main()
